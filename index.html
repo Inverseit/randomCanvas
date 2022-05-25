@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Is this your image?</title>
+    <style>
+      body {
+        height: 100%;
+        font-family: Helvetica, sans-serif;
+      }
+      .parent {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .center {
+        width: 256px;
+        height: 256px;
+      }
+      #redo {
+        color: rgb(5, 5, 143);
+        cursor: pointer;
+      }
+      #redo:hover {
+        color: blue;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="parent">
+        <h2>
+            I think this is Jawaheri's picture of birth.
+          </h2>
+      
+          <p>If you don't think so, then
+              just click <span id="redo" onclick=>reload!</span></p>
+      <canvas class="center" id="image" width="256" height="256"></canvas>
+      <div class="slidecontainer">
+        <input type="range" min="1" max="254" value="32" class="slider" id="range">
+      </div>
+    </div>
+  </body>
+
+  <script>
+    
+    let threshold = 32;
+
+    function generate() {
+      let c = document.getElementById("image");
+      let cw = c.width;
+      var ch = c.height;
+
+      let ctx = c.getContext("2d");
+      ctx.moveTo(0, 0);
+      let id = ctx.getImageData(0, 0, 1, 1);
+
+      let color;
+      ctx.clearRect(0, 0, cw, ch);
+      id.data[3] = 255;
+      for (let i = 0; i < 256; i++) {
+        for (let j = 0; j < 256; j++) {
+          color = Math.floor(Math.random() * 256);
+          id.data[0] = color;
+          id.data[1] = color;
+          id.data[2] = color;
+          if (color < threshold) {
+            ctx.putImageData(id, i, j);
+          }
+        }
+      }
+    }
+
+    document.getElementById('redo').onclick = generate;
+
+    document.getElementById('range').oninput = function changeThresholdAndGenerate() {
+        threshold = this.value;
+        console.log(this.value);
+        generate();
+    };
+
+    generate();
+  </script>
+</html>
