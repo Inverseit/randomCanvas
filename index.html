@@ -7,11 +7,17 @@
     <title>Is this your image?</title>
     <style>
       body {
-        height: 100%;
+        height: 100vh;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-family: Helvetica, sans-serif;
+        /* background-image: linear-gradient(to right bottom, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
+        background-image: radial-gradient(circle, #051937, #022c4c, #00405f, #005472, #006a82, #007e8f, #009197, #00a59a, #00ba92, #28ce7b, #69de56, #a8eb12);
       }
       .parent {
-        height: 100%;
+          margin-top: -100px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -20,13 +26,20 @@
       .center {
         width: 256px;
         height: 256px;
+        box-shadow: 10px 10px 14px 1px rgb(0 0 0 / 20%);
+      }
+      #range{
+        margin-top: 10px;
+      }
+      h1 {
+        text-shadow: 2px 3px 0px #898999;
       }
       #redo {
-        color: rgb(5, 5, 143);
+          font-weight: 600;
         cursor: pointer;
       }
       #redo:hover {
-        color: blue;
+          color: rgb(74, 74, 174);
       }
     </style>
   </head>
@@ -66,10 +79,15 @@
       for (let i = 0; i < 256; i++) {
         for (let j = 0; j < 256; j++) {
           color = Math.floor(Math.random() * 256);
-          id.data[0] = color;
+          if (color < threshold) {
+            id.data[0] = color;
           id.data[1] = color;
           id.data[2] = color;
-          if (color < threshold) {
+            ctx.putImageData(id, i, j);
+          } else {
+            id.data[0] = 255;
+          id.data[1] = 255;
+          id.data[2] = 255;
             ctx.putImageData(id, i, j);
           }
         }
